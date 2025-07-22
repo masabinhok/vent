@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { MatchModule } from './match/match.module';
 import { SessionModule } from './session/session.module';
 import config from './config/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import config from './config/config';
     }),
     MatchModule,
     SessionModule,
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController],
 })

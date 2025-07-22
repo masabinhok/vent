@@ -35,6 +35,8 @@ model Session {
   status           SessionStatus    @default(ACTIVE)
   friendshipStatus FriendshipStatus @default(PENDING)
   updatedAt        DateTime         @updatedAt()
+
+  @@index([status, expiresAt])
 }
 
 model MatchmakingQueue {

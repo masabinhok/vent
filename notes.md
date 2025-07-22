@@ -27,3 +27,5 @@
   - Admin feature to check all sessions
   – Create a session between two users.
   – Check if a user has an active session.
+
+13. Add cron jobs to schedule expireSession every 10 minutes using @nestjs/schedule

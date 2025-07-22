@@ -8,20 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// single device support hunxa kinaki, we only have one rt per user.
-// model User {
-//   id           Int     @id @default(autoincrement())
-//   fullName     String
-//   email        String  @unique
-//   password     String
-//   refreshToken String?
-//   role         String
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
-
-// multi-device support ko lagi we have to store an array ok refreshTokens
 model User {
   id           Int     @id @default(autoincrement())
   fullName     String
@@ -38,4 +24,32 @@ enum Role {
   USER
   ADMIN
   MODERATOR
+}
+
+model Session {
+  id               Int              @id @default(autoincrement()) // 
+  user1Id          Int
+  user2Id          Int
+  startedAt        DateTime         @default(now())
+  expiresAt        DateTime
+  status           SessionStatus    @default(ACTIVE)
+  friendshipStatus FriendshipStatus @default(PENDING)
+  updatedAt        DateTime         @updatedAt()
+}
+
+model MatchmakingQueue {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  requestedAt DateTime @default(now())
+}
+
+enum SessionStatus {
+  ACTIVE
+  ENDED
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

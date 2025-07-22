@@ -4,6 +4,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
+import { MatchModule } from './match/match.module';
+import { SessionModule } from './session/session.module';
 import config from './config/config';
 
 @Module({
@@ -15,6 +17,8 @@ import config from './config/config';
       isGlobal: true,
       load: [config],
     }),
+    MatchModule,
+    SessionModule,
   ],
   controllers: [AppController],
 })

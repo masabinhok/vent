@@ -3,6 +3,7 @@ import { useAuth } from '@/store/authStore'
 import { LoginInput } from '@/types/types';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import BackNav from '@/components/BackNav';
 
 const LoginPage = () => {
   const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
@@ -16,14 +17,14 @@ const LoginPage = () => {
     if (isAuthenticated) {
       router.push('/dashboard')
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, router])
 
   const handleChange = (field: keyof LoginInput, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
-    // Clear any existing error when user starts typing
+
     if (error) clearError();
   }
 
@@ -39,6 +40,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
+      <BackNav />
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
@@ -95,14 +97,14 @@ const LoginPage = () => {
 
         <div className="mt-6 text-center">
           <p className="text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <a href="/register" className="text-purple-600 hover:text-purple-700 font-medium">
               Sign up
             </a>
           </p>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

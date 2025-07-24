@@ -1,7 +1,8 @@
 'use client'
+import BackNav from '@/components/BackNav';
 import { useAuth } from '@/store/authStore'
 import { RegisterInput } from '@/types/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 const RegisterPage = () => {
@@ -17,7 +18,7 @@ const RegisterPage = () => {
     if (isAuthenticated) {
       router.push('/dashboard')
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, router])
 
   const handleChange = (field: keyof RegisterInput, value: string) => {
     setFormData(prev => ({
@@ -41,11 +42,14 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
+
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <BackNav />
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Join MyVent</h1>
           <p className="text-gray-600">Start your anonymous journey</p>
         </div>
+
 
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">

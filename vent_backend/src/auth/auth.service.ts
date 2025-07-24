@@ -68,6 +68,7 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<{
     accessToken: string;
     refreshToken: string;
+    user: Partial<User>
   }> {
     const { email, password } = loginDto;
 
@@ -80,7 +81,8 @@ export class AuthService {
     const tokens = await this.generateTokens(user.id, email, user.role);
 
     await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+    const safeUser = await this.usersService.getSafeUser(user);
+    return {...tokens, user: safeUser}
   }
 
   async refresh(

@@ -6,11 +6,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SessionService {
   constructor(private prisma: PrismaService){}
 
-  async getAllSessions(){
+  async getAll(){
     return this.prisma.session.findMany({});
   }
 
-  async createSession(user1Id: number, user2Id: number): Promise<{
+  async get(id: number){
+    return this.prisma.session.findFirst({
+      where: {
+        id
+      }
+    })
+  }
+
+  async create(user1Id: number, user2Id: number): Promise<{
     message: string, 
     type: MessageType, 
     status: RequestStatus
@@ -34,7 +42,7 @@ export class SessionService {
     }
   }
 
-  async checkSession(userId: number){
+  async check(userId: number){
     const existingSession = await this.prisma.session.findFirst({
       where: {
         OR: [
@@ -46,4 +54,14 @@ export class SessionService {
     });
     return existingSession ? true : false;
   }
+
+  async deleteAll() {
+    return this.prisma.session.deleteMany();
+  }
+
+  async delete(id: number){
+    return this.prisma.session.delete({where: {
+      id
+    }})
+  };
 }

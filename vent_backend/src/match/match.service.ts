@@ -10,8 +10,18 @@ export class MatchService {
     private sessionService: SessionService
   ) {}
 
-  async getAllRequests(): Promise<MatchmakingQueue[]>{
+  async getAll(): Promise<MatchmakingQueue[]>{
     return this.prisma.matchmakingQueue.findMany({});
+  }
+
+  async deleteAll() {
+    return this.prisma.matchmakingQueue.deleteMany();
+  }
+
+  async delete(id: number){
+    return this.prisma.matchmakingQueue.delete({where: {
+      id
+    }})
   }
 
   async requestForMatch(userId: number): Promise<{
@@ -20,7 +30,7 @@ export class MatchService {
     status: RequestStatus
   }>{
     // a user can't request if has a active session..
-    const existingSession = await this.sessionService.checkSession(userId);
+    const existingSession = await this.sessionService.check(userId);
     if(existingSession){
       return {
         message: 'You have an active session. Failed to create a request.',
@@ -61,7 +71,7 @@ export class MatchService {
         id: potentialMatch.id
       }});
       //create a session..
-      return this.sessionService.createSession(userId, potentialMatch.userId);
+      return this.sessionService.create(userId, potentialMatch.userId);
     }
 
     // if there are no match, just create a new matchRequest.

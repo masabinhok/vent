@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { SessionService } from './session.service';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
@@ -12,8 +12,27 @@ export class SessionController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  @Get('getAllSessions')
-  async getAllSessions(){
-    return this.sessionService.getAllSessions();
+  @Get('')
+  async getAll(){
+    return this.sessionService.getAll();
+  }
+
+  @Get(':id')
+  async get(@Param('id') id: number){
+    return this.sessionService.get(id);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Delete('delete')
+  async deleteAll(){
+    return this.sessionService.deleteAll();
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @Delete('delete/:id')
+  async delete(@Param('id') id: number){
+    return this.sessionService.delete(id);
   }
 }

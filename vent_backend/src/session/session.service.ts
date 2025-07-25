@@ -18,7 +18,12 @@ export class SessionService {
           {user2Id: id}
         ],
         status: 'ACTIVE'
+      },
+      include: {
+        user1: true, 
+        user2: true
       }
+      
     })
   }
 

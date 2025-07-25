@@ -1,6 +1,4 @@
 'use client';
-
-import Message from '@/components/Message';
 import api from '@/lib/apiClient';
 import { useAuth } from '@/store/authStore';
 import { useMessage } from '@/store/messageStore';
@@ -45,7 +43,6 @@ const Dashboard = () => {
 
   return (
     <main className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50 text-gray-800 px-4">
-      <Message />
       <button onClick={() => {
         requestStatus === 'off' ? handleMatchReq() : {}
       }} className='bg-green-500 px-6 py-2 rounded-sm text-white font-bold'>

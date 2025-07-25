@@ -16,6 +16,9 @@ model User {
   role         Role    @default(USER)
   refreshToken String?
 
+  sessionsAsUser1 Session[] @relation("User1Sessions")
+  sessionsAsUser2 Session[] @relation("User2Sessions")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -27,9 +30,11 @@ enum Role {
 }
 
 model Session {
-  id               Int              @id @default(autoincrement()) // 
+  id               Int              @id @default(autoincrement())
   user1Id          Int
   user2Id          Int
+  user1            User             @relation("User1Sessions", fields: [user1Id], references: [id])
+  user2            User             @relation("User2Sessions", fields: [user2Id], references: [id])
   startedAt        DateTime         @default(now())
   expiresAt        DateTime
   status           SessionStatus    @default(ACTIVE)

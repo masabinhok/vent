@@ -4,6 +4,7 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'generated/prisma';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('session')
@@ -12,13 +13,13 @@ export class SessionController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  @Get('')
+  @Get('all')
   async getAll(){
     return this.sessionService.getAll();
   }
 
-  @Get(':id')
-  async get(@Param('id') id: number){
+  @Get('')
+  async get(@GetUser('sub') id: number){
     return this.sessionService.get(id);
   }
 

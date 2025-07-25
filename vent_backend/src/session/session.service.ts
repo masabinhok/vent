@@ -13,7 +13,11 @@ export class SessionService {
   async get(id: number){
     return this.prisma.session.findFirst({
       where: {
-        id
+        OR: [
+          {user1Id: id},
+          {user2Id: id}
+        ],
+        status: 'ACTIVE'
       }
     })
   }

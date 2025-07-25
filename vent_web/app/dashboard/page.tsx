@@ -1,11 +1,18 @@
 'use client';
 
+import Message from '@/components/Message';
+import api from '@/lib/apiClient';
 import { useAuth } from '@/store/authStore';
+import { useMessage } from '@/store/messageStore';
 import { useRouter } from 'next/navigation';
+import { RequestStatus } from '@shared/types'
 import React, { useEffect } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const Dashboard = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const [requestStatus, setRequestStatus] = useLocalStorage<RequestStatus>('requestStatus', 'off');
+  const { isAuthenticated } = useAuth();
+  const { setMessage } = useMessage();
   const router = useRouter();
 
   useEffect(() => {
@@ -16,24 +23,34 @@ const Dashboard = () => {
 
   if (!isAuthenticated) return null; // Prevent flicker
 
+
+  const handleMatchReq = async () => {
+    try {
+      const res = await api.post('match/request');
+      setMessage({
+        content: res.data.message,
+        type: res.data.type
+      });
+      console.log(res.data)
+      setRequestStatus(res.data.status);
+    }
+    catch (err) {
+      setMessage({
+        content: 'Failed to send request.',
+        type: 'error'
+      })
+      console.error(err);
+    }
+  }
+
   return (
     <main className="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50 text-gray-800 px-4">
-      <div className="max-w-2xl w-full space-y-6 text-center">
-        <h1 className="text-3xl font-bold">Welcome back, {user?.fullName} 👋</h1>
-        <p className="text-gray-600">Here’s your dashboard overview. Let’s build something cool.</p>
-
-        {/* Placeholder for future dashboard widgets */}
-        <section className="bg-white shadow rounded-lg p-6 border border-gray-200">
-          <p className="text-gray-500">Dashboard content coming soon...</p>
-        </section>
-
-        <button
-          onClick={logout}
-          className="mt-6 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-6 rounded-md transition-colors"
-        >
-          Logout
-        </button>
-      </div>
+      <Message />
+      <button onClick={() => {
+        requestStatus === 'off' ? handleMatchReq() : {}
+      }} className='bg-green-500 px-6 py-2 rounded-sm text-white font-bold'>
+        {requestStatus === 'off' ? 'Request' : requestStatus === 'pending' ? 'Pending request' : 'Sesssion Active'}
+      </button>
     </main>
   );
 };

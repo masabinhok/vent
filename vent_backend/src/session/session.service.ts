@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { MessageType, RequestStatus } from '@shared/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -9,7 +10,11 @@ export class SessionService {
     return this.prisma.session.findMany({});
   }
 
-  async createSession(user1Id: number, user2Id: number){
+  async createSession(user1Id: number, user2Id: number): Promise<{
+    message: string, 
+    type: MessageType, 
+    status: RequestStatus
+  }>{
     //set 24 hours expiry
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -23,7 +28,9 @@ export class SessionService {
     });
     
     return {
-      message: 'Session created successfully.'
+      message: 'Session created successfully.',
+      type: 'success',
+      status: 'active'
     }
   }
 
@@ -33,7 +40,8 @@ export class SessionService {
         OR: [
           {user1Id: userId},
           {user2Id: userId}
-        ]
+        ],
+        status: 'ACTIVE'
       }
     });
     return existingSession ? true : false;

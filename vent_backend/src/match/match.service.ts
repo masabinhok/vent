@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MatchmakingQueue } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SessionService } from 'src/session/session.service';
+import {MessageType, RequestStatus} from '@shared/types'
 
 @Injectable()
 export class MatchService {
@@ -14,13 +15,17 @@ export class MatchService {
   }
 
   async requestForMatch(userId: number): Promise<{
-    message: string
+    message: string,
+    type: MessageType
+    status: RequestStatus
   }>{
     // a user can't request if has a active session..
     const existingSession = await this.sessionService.checkSession(userId);
     if(existingSession){
       return {
-        message: 'You have an active session. Failed to create a request.'
+        message: 'You have an active session. Failed to create a request.',
+        type: 'error',
+        status: 'active'
       }
     }
 
@@ -35,6 +40,8 @@ export class MatchService {
     if(existingUserRequest){
       return {
         message: 'You have a pending request!',
+        type: 'warn',
+        status: 'pending'
       }
     }
     
@@ -66,10 +73,10 @@ export class MatchService {
 
     return {
       message: 'New Match Request Created for User.',
+      type: 'success',
+      status: 'pending'
     }
   }
-
-  
 }
 
 

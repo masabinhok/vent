@@ -3,7 +3,7 @@ import api from '@/lib/apiClient';
 import { useAuth } from '@/store/authStore';
 import { useMessage } from '@/store/messageStore';
 import { useRouter } from 'next/navigation';
-import { RequestStatus } from '@shared/types'
+import { RequestStatus } from '@/types/types'
 import React, { useEffect } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 

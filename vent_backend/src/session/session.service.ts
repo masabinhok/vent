@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MessageType, RequestStatus } from '@shared/types';
+import { MessageType, RequestStatus } from '../common/types/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

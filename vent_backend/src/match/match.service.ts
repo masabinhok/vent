@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MatchmakingQueue } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SessionService } from 'src/session/session.service';
-import {MessageType, RequestStatus} from '@shared/types'
+import { MessageType, RequestStatus } from '../common/types/types';
 
 @Injectable()
 export class MatchService {
